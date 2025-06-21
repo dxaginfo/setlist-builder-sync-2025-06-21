@@ -1,140 +1,177 @@
 # Setlist Builder + Sync
 
-A modern web application for musicians to create, manage, and sync setlists across devices and with band members.
+A comprehensive web application for musicians and bands to create, manage, and collaborate on performance setlists.
 
-## 🎵 Overview
+## Features
 
-Setlist Builder + Sync helps musicians and bands organize their performance setlists with features like drag-and-drop reordering, automatic duration calculations, collaborative editing, and cross-device synchronization.
+- **Setlist Management**: Create, edit, and organize setlists for different performances
+- **Song Library**: Maintain a library of songs with details like key, tempo, and duration
+- **Drag-and-Drop Reordering**: Easily rearrange songs in your setlist
+- **Real-time Collaboration**: Invite band members to collaborate on setlists
+- **Performance Mode**: Optimized view for live performances with auto-scrolling lyrics/chords
+- **Export Options**: Export setlists to various formats (PDF, CSV, text)
+- **Cross-Device Sync**: Access your setlists on any device
 
-## ✨ Key Features
+## Documentation
 
-- **Setlist Management**: Create, edit, and organize setlists with drag-and-drop functionality
-- **Song Library**: Build and maintain a comprehensive library of your songs with metadata
-- **Real-time Sync**: Seamless synchronization across devices with offline support
-- **Collaboration**: Share setlists with band members and manage permissions
-- **Performance Mode**: Easy-to-use interface for live performances with auto-scroll lyrics/chords
-- **Export Options**: Export setlists in various formats (PDF, CSV, plain text)
+- [Project Plan Document](https://docs.google.com/document/d/1cymYHM7dOHTfv16ACmBg3zRKRGs-RODT2hcL95VHmaU/edit) - Detailed project documentation and architecture
+- [Development Tracking Sheet](https://docs.google.com/spreadsheets/d/1iYLy_sdZXm4fFAWaDT-x6fvQe5ySIASkJR2PT0RLP30/edit) - Project development progress
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Frontend
 - React.js with TypeScript
 - Material UI and Tailwind CSS
 - Redux Toolkit for state management
 - Socket.io client for real-time updates
-- Progressive Web App (PWA) capabilities
+- Formik and Yup for form handling
+- React Beautiful DnD for drag-and-drop functionality
 
 ### Backend
 - Node.js with Express.js
-- RESTful API with OpenAPI documentation
+- Prisma ORM
+- PostgreSQL database
 - JWT authentication
 - Socket.io for real-time communication
+- Redis for caching and pub/sub messaging
 
-### Database
-- PostgreSQL with Prisma ORM
-- Redis for caching and performance
-
-### DevOps
-- Docker containerization
-- GitHub Actions for CI/CD
-- AWS deployment (Elastic Beanstalk, S3, CloudFront)
-
-## 📋 Getting Started
+## Setup Instructions
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- npm or yarn
-- PostgreSQL (v13 or higher)
-- Redis
+- Node.js (v16+)
+- PostgreSQL
+- Redis (optional, for advanced caching)
 
-### Installation
-
+### Backend Setup
 1. Clone the repository
-```bash
-git clone https://github.com/dxaginfo/setlist-builder-sync-2025-06-21.git
-cd setlist-builder-sync-2025-06-21
+   ```
+   git clone https://github.com/dxaginfo/setlist-builder-sync-2025-06-21.git
+   cd setlist-builder-sync-2025-06-21
+   ```
+
+2. Install backend dependencies
+   ```
+   cd backend
+   npm install
+   ```
+
+3. Create a `.env` file in the backend directory with the following variables:
+   ```
+   DATABASE_URL="postgresql://username:password@localhost:5432/setlist_builder_db"
+   JWT_SECRET="your_jwt_secret"
+   REFRESH_TOKEN_SECRET="your_refresh_token_secret"
+   PORT=5000
+   FRONTEND_URL="http://localhost:3000"
+   NODE_ENV="development"
+   ```
+
+4. Run Prisma migrations to set up the database
+   ```
+   npx prisma migrate dev
+   ```
+
+5. Start the backend server
+   ```
+   npm run dev
+   ```
+
+### Frontend Setup
+1. Install frontend dependencies
+   ```
+   cd ../frontend
+   npm install
+   ```
+
+2. Create a `.env` file in the frontend directory with the following variables:
+   ```
+   REACT_APP_API_URL=http://localhost:5000/api
+   REACT_APP_SOCKET_URL=http://localhost:5000
+   ```
+
+3. Start the frontend development server
+   ```
+   npm start
+   ```
+
+4. Access the application at `http://localhost:3000`
+
+## Project Structure
+
 ```
-
-2. Install dependencies for the backend
-```bash
-cd backend
-npm install
-```
-
-3. Install dependencies for the frontend
-```bash
-cd ../frontend
-npm install
-```
-
-4. Set up environment variables
-   - Create `.env` files in both backend and frontend directories based on the provided `.env.example` templates
-
-5. Initialize the database
-```bash
-cd ../backend
-npx prisma migrate dev
-```
-
-6. Start the development servers
-```bash
-# In the backend directory
-npm run dev
-
-# In the frontend directory (in a new terminal)
-npm start
-```
-
-7. Access the application at `http://localhost:3000`
-
-## 🗂️ Project Structure
-
-```
-setlist-builder-sync/
-├── backend/               # Node.js Express backend
+├── backend/
+│   ├── prisma/
+│   │   └── schema.prisma     # Database schema
 │   ├── src/
-│   │   ├── config/        # Configuration files
-│   │   ├── controllers/   # Request handlers
-│   │   ├── middleware/    # Express middleware
-│   │   ├── models/        # Data models
-│   │   ├── routes/        # API routes
-│   │   ├── services/      # Business logic
-│   │   ├── socket/        # Socket.io handlers
-│   │   └── utils/         # Utility functions
-│   ├── prisma/            # Prisma schema and migrations
-│   └── tests/             # Backend tests
-├── frontend/              # React frontend
-│   ├── public/            # Static files
-│   ├── src/
-│   │   ├── assets/        # Images, fonts, etc.
-│   │   ├── components/    # React components
-│   │   ├── hooks/         # Custom React hooks
-│   │   ├── layouts/       # Page layout components
-│   │   ├── pages/         # Page components
-│   │   ├── services/      # API service integrations
-│   │   ├── store/         # Redux store
-│   │   ├── types/         # TypeScript type definitions
-│   │   └── utils/         # Utility functions
-│   └── tests/             # Frontend tests
-├── docker/                # Docker configuration files
-├── docs/                  # Documentation
-└── scripts/               # Utility scripts
+│   │   ├── middleware/       # Middleware functions
+│   │   ├── routes/           # API route handlers
+│   │   ├── socket/           # Socket.io event handlers
+│   │   └── index.js          # Express server setup
+│   └── package.json
+│
+└── frontend/
+    ├── public/
+    ├── src/
+    │   ├── components/       # Reusable React components
+    │   ├── layouts/          # Page layout components
+    │   ├── pages/            # Page components
+    │   ├── store/            # Redux store setup
+    │   ├── services/         # API service functions
+    │   ├── utils/            # Utility functions
+    │   └── App.tsx           # Main application component
+    └── package.json
 ```
 
-## 🤝 Contributing
+## API Endpoints
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+### Authentication
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Login and get tokens
+- `POST /api/auth/refresh` - Refresh access token
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Setlists
+- `GET /api/setlists` - Get all setlists for the current user
+- `POST /api/setlists` - Create a new setlist
+- `GET /api/setlists/:id` - Get a setlist by ID
+- `PUT /api/setlists/:id` - Update a setlist
+- `DELETE /api/setlists/:id` - Delete a setlist
 
-## 📝 License
+### Songs in Setlists
+- `POST /api/setlists/:id/songs` - Add a song to a setlist
+- `PUT /api/setlists/:id/songs/:songId` - Update a song in a setlist
+- `DELETE /api/setlists/:id/songs/:songId` - Remove a song from a setlist
+- `PUT /api/setlists/:id/songs/reorder` - Reorder songs in a setlist
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Songs
+- `GET /api/songs` - Get all songs for the current user
+- `POST /api/songs` - Create a new song
+- `GET /api/songs/:id` - Get a song by ID
+- `PUT /api/songs/:id` - Update a song
+- `DELETE /api/songs/:id` - Delete a song
 
-## 📬 Contact
+### Collaborators
+- `POST /api/setlists/:id/collaborators` - Add a collaborator
+- `PUT /api/setlists/:id/collaborators/:userId` - Update collaborator permissions
+- `DELETE /api/setlists/:id/collaborators/:userId` - Remove a collaborator
 
-Project Link: [https://github.com/dxaginfo/setlist-builder-sync-2025-06-21](https://github.com/dxaginfo/setlist-builder-sync-2025-06-21)
+## Deployment
+
+### Backend
+1. Set up environment variables for production
+2. Build the backend (if using TypeScript)
+3. Deploy to a Node.js hosting service (AWS, Heroku, etc.)
+
+### Frontend
+1. Build the React application
+   ```
+   cd frontend
+   npm run build
+   ```
+2. Deploy the build folder to a static hosting service (Netlify, Vercel, AWS S3, etc.)
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contact
+
+For more information or support, refer to the project documentation or open an issue on GitHub.
